@@ -8,11 +8,11 @@ async def run():
     devices = await BleakScanner.discover()
     for d in devices:
         try:
-            async with BleakClient(d, timeout=3) as client:
+            async with BleakClient(d, timeout=5) as client:
                 try:
                     model_number = await client.read_gatt_char(MODEL_NBR_UUID)
                 except (EOFError, BleakError):
-                    print(f'Could not connect to {d}')
+                    print(f'Could not read model number of {d}')
                 else:
                     print(f"{d.name} Model Number: {''.join(map(chr, model_number))}")
         except (BleakError, asyncio.TimeoutError):
